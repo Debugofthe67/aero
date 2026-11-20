@@ -19,11 +19,12 @@ jobs:
         uses: dtolnay/rust-toolchain@nightly
         with:
           targets: wasm32-unknown-unknown
-
+          
       - name: Install wasm-pack & Dependencies
         run: |
           cargo install wasm-pack
-          npm ci
+          npm install
+
 
       - name: Build Web Bundle
         run: npm run build
