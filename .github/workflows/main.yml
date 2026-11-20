@@ -1,0 +1,35 @@
+name: Build Aero WASM
+on:
+  workflow_dispatch:
+  push:
+    branches: [ master, main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Setup Rust Nightly + WASM
+        uses: dtolnay/rust-toolchain@nightly
+        with:
+          targets: wasm32-unknown-unknown
+
+      - name: Install wasm-pack & Dependencies
+        run: |
+          cargo install wasm-pack
+          npm ci
+
+      - name: Build Web Bundle
+        run: npm run build
+
+      - name: Upload Web Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: aero-web-dist
+          path: dist/
